@@ -1,0 +1,90 @@
+-- Fixed Primary Keys for ALL tables
+-- Run these one by one in SSMS
+
+-- 1. Alumni
+ALTER TABLE [dbo].[Alumni] ALTER COLUMN [alumni_id] INT NOT NULL;
+ALTER TABLE [dbo].[Alumni] ADD CONSTRAINT PK_Alumni PRIMARY KEY ([alumni_id]);
+
+-- 2. Attendance
+ALTER TABLE [dbo].[Attendance] ALTER COLUMN [attendance_id] INT NOT NULL;
+ALTER TABLE [dbo].[Attendance] ADD CONSTRAINT PK_Attendance PRIMARY KEY ([attendance_id]);
+
+-- 3. BookIssues
+ALTER TABLE [dbo].[BookIssues] ALTER COLUMN [issue_id] INT NOT NULL;
+ALTER TABLE [dbo].[BookIssues] ADD CONSTRAINT PK_BookIssues PRIMARY KEY ([issue_id]);
+
+-- 4. Buildings
+ALTER TABLE [dbo].[Buildings] ALTER COLUMN [building_id] INT NOT NULL;
+ALTER TABLE [dbo].[Buildings] ADD CONSTRAINT PK_Buildings PRIMARY KEY ([building_id]);
+
+-- 5. Courses
+ALTER TABLE [dbo].[Courses] ALTER COLUMN [course_id] INT NOT NULL;
+ALTER TABLE [dbo].[Courses] ADD CONSTRAINT PK_Courses PRIMARY KEY ([course_id]);
+
+-- 6. CourseSyllabus
+ALTER TABLE [dbo].[CourseSyllabus] ALTER COLUMN [syllabus_id] INT NOT NULL;
+ALTER TABLE [dbo].[CourseSyllabus] ADD CONSTRAINT PK_CourseSyllabus PRIMARY KEY ([syllabus_id]);
+
+-- 7. Departments
+ALTER TABLE [dbo].[Departments] ALTER COLUMN [dept_id] INT NOT NULL;
+ALTER TABLE [dbo].[Departments] ADD CONSTRAINT PK_Departments PRIMARY KEY ([dept_id]);
+
+-- 8. Enrollments
+ALTER TABLE [dbo].[Enrollments] ALTER COLUMN [enrollment_id] INT NOT NULL;
+ALTER TABLE [dbo].[Enrollments] ADD CONSTRAINT PK_Enrollments PRIMARY KEY ([enrollment_id]);
+
+-- 9. Examinations
+ALTER TABLE [dbo].[Examinations] ALTER COLUMN [exam_id] INT NOT NULL;
+ALTER TABLE [dbo].[Examinations] ADD CONSTRAINT PK_Examinations PRIMARY KEY ([exam_id]);
+
+-- 10. ExamResults
+ALTER TABLE [dbo].[ExamResults] ALTER COLUMN [result_id] INT NOT NULL;
+ALTER TABLE [dbo].[ExamResults] ADD CONSTRAINT PK_ExamResults PRIMARY KEY ([result_id]);
+
+-- 11. Faculty
+ALTER TABLE [dbo].[Faculty] ALTER COLUMN [faculty_id] INT NOT NULL;
+ALTER TABLE [dbo].[Faculty] ADD CONSTRAINT PK_Faculty PRIMARY KEY ([faculty_id]);
+
+-- 12. Fees
+ALTER TABLE [dbo].[Fees] ALTER COLUMN [fee_id] INT NOT NULL;
+ALTER TABLE [dbo].[Fees] ADD CONSTRAINT PK_Fees PRIMARY KEY ([fee_id]);
+
+-- 13. Grades
+ALTER TABLE [dbo].[Grades] ALTER COLUMN [grade_id] INT NOT NULL;
+ALTER TABLE [dbo].[Grades] ADD CONSTRAINT PK_Grades PRIMARY KEY ([grade_id]);
+
+-- 14. LibraryBooks
+ALTER TABLE [dbo].[LibraryBooks] ALTER COLUMN [book_id] INT NOT NULL;
+ALTER TABLE [dbo].[LibraryBooks] ADD CONSTRAINT PK_LibraryBooks PRIMARY KEY ([book_id]);
+
+-- 15. Payments
+ALTER TABLE [dbo].[Payments] ALTER COLUMN [payment_id] INT NOT NULL;
+ALTER TABLE [dbo].[Payments] ADD CONSTRAINT PK_Payments PRIMARY KEY ([payment_id]);
+
+-- 16. ProjectMembers
+ALTER TABLE [dbo].[ProjectMembers] ALTER COLUMN [member_id] INT NOT NULL;
+ALTER TABLE [dbo].[ProjectMembers] ADD CONSTRAINT PK_ProjectMembers PRIMARY KEY ([member_id]);
+
+-- 17. ResearchProjects
+ALTER TABLE [dbo].[ResearchProjects] ALTER COLUMN [project_id] INT NOT NULL;
+ALTER TABLE [dbo].[ResearchProjects] ADD CONSTRAINT PK_ResearchProjects PRIMARY KEY ([project_id]);
+
+-- 18. RevenueSummary
+ALTER TABLE [dbo].[RevenueSummary] ALTER COLUMN [summary_id] INT NOT NULL;
+ALTER TABLE [dbo].[RevenueSummary] ADD CONSTRAINT PK_RevenueSummary PRIMARY KEY ([summary_id]);
+
+-- 19. Rooms
+ALTER TABLE [dbo].[Rooms] ALTER COLUMN [room_id] INT NOT NULL;
+ALTER TABLE [dbo].[Rooms] ADD CONSTRAINT PK_Rooms PRIMARY KEY ([room_id]);
+
+-- 20. Sections
+ALTER TABLE [dbo].[Sections] ALTER COLUMN [section_id] INT NOT NULL;
+ALTER TABLE [dbo].[Sections] ADD CONSTRAINT PK_Sections PRIMARY KEY ([section_id]);
+
+-- 21. Students
+ALTER TABLE [dbo].[Students] ALTER COLUMN [student_id] INT NOT NULL;
+ALTER TABLE [dbo].[Students] ADD CONSTRAINT PK_Students PRIMARY KEY ([student_id]);
+
+-- 22. StudentSectionAssignments
+ALTER TABLE [dbo].[StudentSectionAssignments] ALTER COLUMN [assignment_id] INT NOT NULL;
+ALTER TABLE [dbo].[StudentSectionAssignments] ADD CONSTRAINT PK_StudentSectionAssignments PRIMARY KEY ([assignment_id]);

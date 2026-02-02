@@ -1,0 +1,142 @@
+-- ADD FOREIGN KEY CONSTRAINTS
+-- Run these one by one
+
+-- 1. Connect Students to Departments
+ALTER TABLE [dbo].[Students] 
+ADD CONSTRAINT FK_Students_Departments 
+FOREIGN KEY ([dept_id]) REFERENCES [dbo].[Departments]([dept_id]);
+
+-- 2. Connect Faculty to Departments
+ALTER TABLE [dbo].[Faculty] 
+ADD CONSTRAINT FK_Faculty_Departments 
+FOREIGN KEY ([dept_id]) REFERENCES [dbo].[Departments]([dept_id]);
+
+-- 3. Connect Courses to Departments
+ALTER TABLE [dbo].[Courses] 
+ADD CONSTRAINT FK_Courses_Departments 
+FOREIGN KEY ([dept_id]) REFERENCES [dbo].[Departments]([dept_id]);
+
+-- 4. Connect Enrollments to Students
+ALTER TABLE [dbo].[Enrollments] 
+ADD CONSTRAINT FK_Enrollments_Students 
+FOREIGN KEY ([student_id]) REFERENCES [dbo].[Students]([student_id]);
+
+-- 5. Connect Enrollments to Courses
+ALTER TABLE [dbo].[Enrollments] 
+ADD CONSTRAINT FK_Enrollments_Courses 
+FOREIGN KEY ([course_id]) REFERENCES [dbo].[Courses]([course_id]);
+
+-- 6. Connect Sections to Courses
+ALTER TABLE [dbo].[Sections] 
+ADD CONSTRAINT FK_Sections_Courses 
+FOREIGN KEY ([course_id]) REFERENCES [dbo].[Courses]([course_id]);
+
+-- 7. Connect Sections to Faculty
+ALTER TABLE [dbo].[Sections] 
+ADD CONSTRAINT FK_Sections_Faculty 
+FOREIGN KEY ([faculty_id]) REFERENCES [dbo].[Faculty]([faculty_id]);
+
+-- 8. Connect Sections to Rooms
+ALTER TABLE [dbo].[Sections] 
+ADD CONSTRAINT FK_Sections_Rooms 
+FOREIGN KEY ([room_id]) REFERENCES [dbo].[Rooms]([room_id]);
+
+-- 9. Connect Rooms to Buildings
+ALTER TABLE [dbo].[Rooms] 
+ADD CONSTRAINT FK_Rooms_Buildings 
+FOREIGN KEY ([building_id]) REFERENCES [dbo].[Buildings]([building_id]);
+
+-- 10. Connect Alumni to Students
+ALTER TABLE [dbo].[Alumni] 
+ADD CONSTRAINT FK_Alumni_Students 
+FOREIGN KEY ([student_id]) REFERENCES [dbo].[Students]([student_id]);
+
+-- 11. Connect Attendance to Students
+ALTER TABLE [dbo].[Attendance] 
+ADD CONSTRAINT FK_Attendance_Students 
+FOREIGN KEY ([student_id]) REFERENCES [dbo].[Students]([student_id]);
+
+-- 12. Connect Attendance to Sections
+ALTER TABLE [dbo].[Attendance] 
+ADD CONSTRAINT FK_Attendance_Sections 
+FOREIGN KEY ([section_id]) REFERENCES [dbo].[Sections]([section_id]);
+
+-- 13. Connect BookIssues to Students
+ALTER TABLE [dbo].[BookIssues] 
+ADD CONSTRAINT FK_BookIssues_Students 
+FOREIGN KEY ([student_id]) REFERENCES [dbo].[Students]([student_id]);
+
+-- 14. Connect BookIssues to LibraryBooks
+ALTER TABLE [dbo].[BookIssues] 
+ADD CONSTRAINT FK_BookIssues_LibraryBooks 
+FOREIGN KEY ([book_id]) REFERENCES [dbo].[LibraryBooks]([book_id]);
+
+-- 15. Connect CourseSyllabus to Courses
+ALTER TABLE [dbo].[CourseSyllabus] 
+ADD CONSTRAINT FK_CourseSyllabus_Courses 
+FOREIGN KEY ([course_id]) REFERENCES [dbo].[Courses]([course_id]);
+
+-- 16. Connect Examinations to Courses
+ALTER TABLE [dbo].[Examinations] 
+ADD CONSTRAINT FK_Examinations_Courses 
+FOREIGN KEY ([course_id]) REFERENCES [dbo].[Courses]([course_id]);
+
+-- 17. Connect ExamResults to Examinations
+ALTER TABLE [dbo].[ExamResults] 
+ADD CONSTRAINT FK_ExamResults_Examinations 
+FOREIGN KEY ([exam_id]) REFERENCES [dbo].[Examinations]([exam_id]);
+
+-- 18. Connect ExamResults to Students
+ALTER TABLE [dbo].[ExamResults] 
+ADD CONSTRAINT FK_ExamResults_Students 
+FOREIGN KEY ([student_id]) REFERENCES [dbo].[Students]([student_id]);
+
+-- 19. Connect Fees to Students
+ALTER TABLE [dbo].[Fees] 
+ADD CONSTRAINT FK_Fees_Students 
+FOREIGN KEY ([student_id]) REFERENCES [dbo].[Students]([student_id]);
+
+-- 20. Connect Grades to Enrollments
+ALTER TABLE [dbo].[Grades] 
+ADD CONSTRAINT FK_Grades_Enrollments 
+FOREIGN KEY ([enrollment_id]) REFERENCES [dbo].[Enrollments]([enrollment_id]);
+
+-- 21. Connect LibraryBooks to Departments
+ALTER TABLE [dbo].[LibraryBooks] 
+ADD CONSTRAINT FK_LibraryBooks_Departments 
+FOREIGN KEY ([dept_id]) REFERENCES [dbo].[Departments]([dept_id]);
+
+-- 22. Connect Payments to Fees
+ALTER TABLE [dbo].[Payments] 
+ADD CONSTRAINT FK_Payments_Fees 
+FOREIGN KEY ([fee_id]) REFERENCES [dbo].[Fees]([fee_id]);
+
+-- 23. Connect ProjectMembers to ResearchProjects
+ALTER TABLE [dbo].[ProjectMembers] 
+ADD CONSTRAINT FK_ProjectMembers_ResearchProjects 
+FOREIGN KEY ([project_id]) REFERENCES [dbo].[ResearchProjects]([project_id]);
+
+-- 24. Connect ProjectMembers to Students
+ALTER TABLE [dbo].[ProjectMembers] 
+ADD CONSTRAINT FK_ProjectMembers_Students 
+FOREIGN KEY ([student_id]) REFERENCES [dbo].[Students]([student_id]);
+
+-- 25. Connect ResearchProjects to Faculty
+ALTER TABLE [dbo].[ResearchProjects] 
+ADD CONSTRAINT FK_ResearchProjects_Faculty 
+FOREIGN KEY ([faculty_id]) REFERENCES [dbo].[Faculty]([faculty_id]);
+
+-- 26. Connect ResearchProjects to Departments
+ALTER TABLE [dbo].[ResearchProjects] 
+ADD CONSTRAINT FK_ResearchProjects_Departments 
+FOREIGN KEY ([dept_id]) REFERENCES [dbo].[Departments]([dept_id]);
+
+-- 27. Connect StudentSectionAssignments to Students
+ALTER TABLE [dbo].[StudentSectionAssignments] 
+ADD CONSTRAINT FK_SSA_Students 
+FOREIGN KEY ([student_id]) REFERENCES [dbo].[Students]([student_id]);
+
+-- 28. Connect StudentSectionAssignments to Sections
+ALTER TABLE [dbo].[StudentSectionAssignments] 
+ADD CONSTRAINT FK_SSA_Sections 
+FOREIGN KEY ([section_id]) REFERENCES [dbo].[Sections]([section_id]);

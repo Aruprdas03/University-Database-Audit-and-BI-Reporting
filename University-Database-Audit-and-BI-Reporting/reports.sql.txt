@@ -1,0 +1,225 @@
+---Reports 
+
+--- Report 1
+-- Top 5 students by CGPA in each department
+WITH RankedStudents AS (
+    SELECT 
+        d.dept_name,
+        s.name as student_name,
+        s.cgpa,
+        s.admission_date,
+        ROW_NUMBER() OVER (PARTITION BY d.dept_id ORDER BY s.cgpa DESC) as rank_in_dept
+    FROM Students s
+    JOIN Departments d ON s.dept_id = d.dept_id
+    WHERE s.cgpa IS NOT NULL AND s.status = 'Active'
+)
+SELECT 
+    dept_name,
+    student_name,
+    cgpa,
+    admission_date,
+    rank_in_dept
+FROM RankedStudents 
+WHERE rank_in_dept <= 5
+ORDER BY dept_name, rank_in_dept;
+
+
+---Report2
+-- Average grades per course with enrollment counts
+SELECT 
+    c.course_code,
+    c.course_name,
+    d.dept_name,
+    COUNT(DISTINCT e.student_id) as total_students,
+    AVG(CAST(g.final_marks AS DECIMAL)) as avg_marks,
+    COUNT(CASE WHEN g.final_grade IN ('A', 'A+') THEN 1 END) * 100.0 / COUNT(*) as A_grade_percentage
+FROM Courses c
+JOIN Departments d ON c.dept_id = d.dept_id
+JOIN Enrollments e ON c.course_id = e.course_id
+LEFT JOIN Grades g ON e.enrollment_id = g.enrollment_id
+WHERE e.year = 2024  -- Current academic year
+GROUP BY c.course_code, c.course_name, d.dept_name
+ORDER BY avg_marks DESC;
+
+---Report3
+-- Count active students in each department.
+SELECT 
+    d.dept_name,
+    COUNT(s.student_id) as total_students,
+    MIN(s.admission_date) as oldest_admission,
+    MAX(s.admission_date) as newest_admission
+FROM Departments d
+LEFT JOIN Students s ON d.dept_id = s.dept_id
+WHERE s.status = 'Active' OR s.status IS NULL
+GROUP BY d.dept_name
+ORDER BY total_students DESC;
+
+---Report4
+-- Count faculty in each department
+SELECT 
+    d.dept_name,
+    COUNT(f.faculty_id) as faculty_count
+FROM Departments d
+LEFT JOIN Faculty f ON d.dept_id = f.dept_id
+GROUP BY d.dept_name
+ORDER BY faculty_count DESC;
+
+---Report 5
+-- List all courses by department
+SELECT 
+    d.dept_name,
+    c.course_code,
+    c.course_name,
+    c.credits
+FROM Departments d
+JOIN Courses c ON d.dept_id = c.dept_id
+ORDER BY d.dept_name, c.course_code;
+
+---Report6
+-- Which books are most popular?
+SELECT TOP 10
+    lb.title,
+    lb.author,
+    d.dept_name,
+    COUNT(bi.issue_id) as times_borrowed,
+    AVG(DATEDIFF(DAY, bi.issue_date, bi.return_date)) as avg_days_borrowed
+FROM LibraryBooks lb
+LEFT JOIN BookIssues bi ON lb.book_id = bi.book_id
+LEFT JOIN Departments d ON lb.dept_id = d.dept_id
+WHERE bi.issue_date IS NOT NULL
+GROUP BY lb.title, lb.author, d.dept_name
+ORDER BY times_borrowed DESC;
+
+---Report7
+-- Which rooms are most used?
+SELECT 
+    b.name as building_name,
+    r.room_number,
+    r.room_type,
+    COUNT(DISTINCT sec.section_id) as sections_held,
+    COUNT(DISTINCT sec.faculty_id) as different_faculty,
+    MAX(r.capacity) as room_capacity
+FROM Buildings b
+JOIN Rooms r ON b.building_id = r.building_id
+LEFT JOIN Sections sec ON r.room_id = sec.room_id
+GROUP BY b.name, r.room_number, r.room_type
+HAVING COUNT(DISTINCT sec.section_id) > 0
+ORDER BY sections_held DESC;
+
+---Report8
+-- Attendance patterns by day of week
+SELECT 
+    DATENAME(WEEKDAY, attendance_date) as day_of_week,
+    status,
+    COUNT(attendance_id) as attendance_count,
+    COUNT(DISTINCT student_id) as unique_students
+FROM Attendance
+WHERE attendance_date IS NOT NULL
+GROUP BY DATENAME(WEEKDAY, attendance_date), status
+ORDER BY 
+    CASE DATENAME(WEEKDAY, attendance_date)
+        WHEN 'Monday' THEN 1
+        WHEN 'Tuesday' THEN 2
+        WHEN 'Wednesday' THEN 3
+        WHEN 'Thursday' THEN 4
+        WHEN 'Friday' THEN 5
+        WHEN 'Saturday' THEN 6
+        WHEN 'Sunday' THEN 7
+    END,
+    status;
+
+--Report9
+-- Faculty research productivity with student mentoring
+SELECT 
+    f.name as faculty_name,
+    d.dept_name,
+    f.designation,
+    COUNT(DISTINCT rp.project_id) as projects_led,
+    SUM(CAST(rp.budget AS DECIMAL(15,2))) as total_research_funding,
+    COUNT(DISTINCT pm.student_id) as students_mentored,
+    COUNT(DISTINCT sec.course_id) as courses_taught,
+    DATEDIFF(YEAR, f.hire_date, GETDATE()) as years_of_service
+FROM Faculty f
+LEFT JOIN Departments d ON f.dept_id = d.dept_id
+LEFT JOIN ResearchProjects rp ON f.faculty_id = rp.faculty_id
+LEFT JOIN ProjectMembers pm ON rp.project_id = pm.project_id
+LEFT JOIN Sections sec ON f.faculty_id = sec.faculty_id
+WHERE f.status = 'Active'
+GROUP BY f.name, d.dept_name, f.designation, f.hire_date
+HAVING COUNT(DISTINCT rp.project_id) > 0
+ORDER BY total_research_funding DESC;
+
+
+---Report10
+-- Building and room utilization for capacity planning
+SELECT 
+    b.name as building_name,
+    r.room_number,
+    r.room_type,
+    r.capacity as max_capacity,
+    COUNT(DISTINCT sec.section_id) as sections_scheduled,
+    COUNT(DISTINCT sec.faculty_id) as faculty_using,
+    COUNT(DISTINCT ssa.student_id) as total_students_assigned,
+    AVG(sec.max_capacity) as avg_section_capacity,
+    ROUND(COUNT(DISTINCT ssa.student_id) * 100.0 / NULLIF(r.capacity * COUNT(DISTINCT sec.section_id), 0), 2) as utilization_percentage,
+    CASE 
+        WHEN COUNT(DISTINCT sec.section_id) = 0 THEN 'Underutilized'
+        WHEN COUNT(DISTINCT ssa.student_id) * 100.0 / NULLIF(r.capacity * COUNT(DISTINCT sec.section_id), 0) > 80 THEN 'Overutilized'
+        WHEN COUNT(DISTINCT ssa.student_id) * 100.0 / NULLIF(r.capacity * COUNT(DISTINCT sec.section_id), 0) < 40 THEN 'Underutilized'
+        ELSE 'Optimally Used'
+    END as utilization_status
+FROM Buildings b
+LEFT JOIN Rooms r ON b.building_id = r.building_id
+LEFT JOIN Sections sec ON r.room_id = sec.room_id AND sec.year = 2024
+LEFT JOIN StudentSectionAssignments ssa ON sec.section_id = ssa.section_id
+GROUP BY b.name, r.room_number, r.room_type, r.capacity
+ORDER BY utilization_percentage DESC;
+
+
+---Report11
+-- Faculty workload distribution and contributions
+SELECT 
+    f.name as faculty_name,
+    d.dept_name,
+    f.designation,
+    -- Teaching workload
+    COUNT(DISTINCT sec.section_id) as sections_teaching,
+    COUNT(DISTINCT ssa.student_id) as students_teaching,
+    -- Research contributions
+    COUNT(DISTINCT rp.project_id) as projects_leading,
+    COUNT(DISTINCT fp.project_id) as projects_involved,
+    COUNT(DISTINCT pm.student_id) as research_students,
+    -- Administrative roles
+    COUNT(DISTINCT CASE WHEN d.head_of_dept = f.name THEN d.dept_id END) as departments_heading,
+    -- Overall contribution score
+    (COUNT(DISTINCT sec.section_id) * 2 + 
+     COUNT(DISTINCT rp.project_id) * 3 +
+     COUNT(DISTINCT fp.project_id) * 2 +
+     COUNT(DISTINCT CASE WHEN d.head_of_dept = f.name THEN d.dept_id END) * 5) as contribution_score
+FROM Faculty f
+LEFT JOIN Departments d ON f.dept_id = d.dept_id
+LEFT JOIN Sections sec ON f.faculty_id = sec.faculty_id AND sec.year = 2024
+LEFT JOIN StudentSectionAssignments ssa ON sec.section_id = ssa.section_id
+LEFT JOIN ResearchProjects rp ON f.faculty_id = rp.faculty_id
+LEFT JOIN FacultyProjects fp ON f.faculty_id = fp.faculty_id
+LEFT JOIN ProjectMembers pm ON rp.project_id = pm.project_id
+WHERE f.status = 'Active'
+GROUP BY f.name, d.dept_name, f.designation
+HAVING COUNT(DISTINCT sec.section_id) > 0 OR COUNT(DISTINCT rp.project_id) > 0
+ORDER BY contribution_score DESC;
+
+
+---Report12
+-- Top 10 most borrowed books
+SELECT TOP 10
+    lb.title,
+    lb.author,
+    d.dept_name,
+    COUNT(bi.issue_id) as times_borrowed,
+    COUNT(DISTINCT bi.student_id) as different_students
+FROM LibraryBooks lb
+LEFT JOIN BookIssues bi ON lb.book_id = bi.book_id
+LEFT JOIN Departments d ON lb.dept_id = d.dept_id
+WHERE bi.issue_id IS NOT NULL
+GROUP BY lb.title, lb.author, d.dept_name
+ORDER BY times_borrowed DESC;

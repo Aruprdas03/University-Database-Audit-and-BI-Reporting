@@ -1,0 +1,395 @@
+USE [master]
+GO
+/****** Object:  Database [BUETBD]    Script Date: 12/27/2025 12:19:40 PM ******/
+CREATE DATABASE [BUETBD]
+ CONTAINMENT = NONE
+ ON  PRIMARY 
+( NAME = N'BUETBD', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL16.SQLEXPRESS\MSSQL\DATA\BUETBD.mdf' , SIZE = 80320KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
+ LOG ON 
+( NAME = N'BUETBD_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL16.SQLEXPRESS\MSSQL\DATA\BUETBD_log.ldf' , SIZE = 66048KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
+ WITH CATALOG_COLLATION = DATABASE_DEFAULT, LEDGER = OFF
+GO
+ALTER DATABASE [BUETBD] SET COMPATIBILITY_LEVEL = 160
+GO
+IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
+begin
+EXEC [BUETBD].[dbo].[sp_fulltext_database] @action = 'enable'
+end
+GO
+ALTER DATABASE [BUETBD] SET ANSI_NULL_DEFAULT OFF 
+GO
+ALTER DATABASE [BUETBD] SET ANSI_NULLS OFF 
+GO
+ALTER DATABASE [BUETBD] SET ANSI_PADDING OFF 
+GO
+ALTER DATABASE [BUETBD] SET ANSI_WARNINGS OFF 
+GO
+ALTER DATABASE [BUETBD] SET ARITHABORT OFF 
+GO
+ALTER DATABASE [BUETBD] SET AUTO_CLOSE ON 
+GO
+ALTER DATABASE [BUETBD] SET AUTO_SHRINK OFF 
+GO
+ALTER DATABASE [BUETBD] SET AUTO_UPDATE_STATISTICS ON 
+GO
+ALTER DATABASE [BUETBD] SET CURSOR_CLOSE_ON_COMMIT OFF 
+GO
+ALTER DATABASE [BUETBD] SET CURSOR_DEFAULT  GLOBAL 
+GO
+ALTER DATABASE [BUETBD] SET CONCAT_NULL_YIELDS_NULL OFF 
+GO
+ALTER DATABASE [BUETBD] SET NUMERIC_ROUNDABORT OFF 
+GO
+ALTER DATABASE [BUETBD] SET QUOTED_IDENTIFIER OFF 
+GO
+ALTER DATABASE [BUETBD] SET RECURSIVE_TRIGGERS OFF 
+GO
+ALTER DATABASE [BUETBD] SET  DISABLE_BROKER 
+GO
+ALTER DATABASE [BUETBD] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
+GO
+ALTER DATABASE [BUETBD] SET DATE_CORRELATION_OPTIMIZATION OFF 
+GO
+ALTER DATABASE [BUETBD] SET TRUSTWORTHY OFF 
+GO
+ALTER DATABASE [BUETBD] SET ALLOW_SNAPSHOT_ISOLATION OFF 
+GO
+ALTER DATABASE [BUETBD] SET PARAMETERIZATION SIMPLE 
+GO
+ALTER DATABASE [BUETBD] SET READ_COMMITTED_SNAPSHOT OFF 
+GO
+ALTER DATABASE [BUETBD] SET HONOR_BROKER_PRIORITY OFF 
+GO
+ALTER DATABASE [BUETBD] SET RECOVERY SIMPLE 
+GO
+ALTER DATABASE [BUETBD] SET  MULTI_USER 
+GO
+ALTER DATABASE [BUETBD] SET PAGE_VERIFY CHECKSUM  
+GO
+ALTER DATABASE [BUETBD] SET DB_CHAINING OFF 
+GO
+ALTER DATABASE [BUETBD] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
+GO
+ALTER DATABASE [BUETBD] SET TARGET_RECOVERY_TIME = 60 SECONDS 
+GO
+ALTER DATABASE [BUETBD] SET DELAYED_DURABILITY = DISABLED 
+GO
+ALTER DATABASE [BUETBD] SET ACCELERATED_DATABASE_RECOVERY = OFF  
+GO
+ALTER DATABASE [BUETBD] SET QUERY_STORE = ON
+GO
+ALTER DATABASE [BUETBD] SET QUERY_STORE (OPERATION_MODE = READ_WRITE, CLEANUP_POLICY = (STALE_QUERY_THRESHOLD_DAYS = 30), DATA_FLUSH_INTERVAL_SECONDS = 900, INTERVAL_LENGTH_MINUTES = 60, MAX_STORAGE_SIZE_MB = 1000, QUERY_CAPTURE_MODE = AUTO, SIZE_BASED_CLEANUP_MODE = AUTO, MAX_PLANS_PER_QUERY = 200, WAIT_STATS_CAPTURE_MODE = ON)
+GO
+USE [BUETBD]
+GO
+/****** Object:  Table [dbo].[Alumni]    Script Date: 12/27/2025 12:19:40 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Alumni](
+	[alumni_id] [int] NULL,
+	[student_id] [int] NULL,
+	[graduation_year] [int] NULL,
+	[current_job] [nvarchar](100) NULL,
+	[company] [nvarchar](100) NULL,
+	[email] [nvarchar](100) NULL
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Attendance]    Script Date: 12/27/2025 12:19:40 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Attendance](
+	[attendance_id] [int] NULL,
+	[student_id] [int] NULL,
+	[section_id] [int] NULL,
+	[attendance_date_str] [nvarchar](20) NULL,
+	[status] [nvarchar](20) NULL
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[BookIssues]    Script Date: 12/27/2025 12:19:40 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[BookIssues](
+	[issue_id] [int] NULL,
+	[book_id] [int] NULL,
+	[student_id] [int] NULL,
+	[issue_date_str] [nvarchar](20) NULL,
+	[due_date_str] [nvarchar](20) NULL,
+	[return_date_str] [nvarchar](20) NULL,
+	[fine_amount] [varchar](20) NULL
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Buildings]    Script Date: 12/27/2025 12:19:40 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Buildings](
+	[building_id] [int] NULL,
+	[name] [nvarchar](100) NULL,
+	[location] [nvarchar](100) NULL
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Courses]    Script Date: 12/27/2025 12:19:40 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Courses](
+	[course_id] [int] NULL,
+	[course_code] [nvarchar](20) NULL,
+	[course_name] [nvarchar](200) NULL,
+	[dept_id] [int] NULL,
+	[credits] [int] NULL,
+	[semester] [nvarchar](20) NULL,
+	[year] [int] NULL,
+	[status] [nvarchar](20) NULL
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[CourseSyllabus]    Script Date: 12/27/2025 12:19:40 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[CourseSyllabus](
+	[syllabus_id] [int] NULL,
+	[course_id] [int] NULL,
+	[syllabus_content] [nvarchar](2000) NULL,
+	[last_updated_str] [date] NULL
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Departments]    Script Date: 12/27/2025 12:19:40 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Departments](
+	[dept_id] [int] NULL,
+	[dept_name] [nvarchar](150) NULL,
+	[head_of_dept] [nvarchar](100) NULL
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Enrollments]    Script Date: 12/27/2025 12:19:40 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Enrollments](
+	[enrollment_id] [int] NULL,
+	[student_id] [int] NULL,
+	[course_id] [int] NULL,
+	[semester] [nvarchar](20) NULL,
+	[year] [int] NULL,
+	[grade] [nvarchar](5) NULL,
+	[enrollment_date_str] [nvarchar](20) NULL
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Examinations]    Script Date: 12/27/2025 12:19:40 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Examinations](
+	[exam_id] [int] NULL,
+	[course_id] [int] NULL,
+	[exam_type] [nvarchar](50) NULL,
+	[exam_date_str] [nvarchar](20) NULL,
+	[total_marks] [int] NULL,
+	[semester] [nvarchar](20) NULL,
+	[year] [int] NULL
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[ExamResults]    Script Date: 12/27/2025 12:19:40 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[ExamResults](
+	[result_id] [int] NULL,
+	[exam_id] [int] NULL,
+	[student_id] [int] NULL,
+	[marks_obtained] [varchar](5) NULL,
+	[grade] [nvarchar](5) NULL
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Faculty]    Script Date: 12/27/2025 12:19:40 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Faculty](
+	[faculty_id] [int] NULL,
+	[name] [nvarchar](100) NULL,
+	[email] [nvarchar](100) NULL,
+	[phone] [nvarchar](20) NULL,
+	[dept_id] [int] NULL,
+	[designation] [nvarchar](50) NULL,
+	[hire_date] [date] NULL,
+	[status] [nvarchar](20) NULL
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Fees]    Script Date: 12/27/2025 12:19:40 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Fees](
+	[fee_id] [int] NULL,
+	[student_id] [int] NULL,
+	[fee_type] [nvarchar](50) NULL,
+	[amount] [varchar](30) NULL,
+	[due_date_str] [nvarchar](20) NULL,
+	[status] [nvarchar](20) NULL,
+	[payment_date_str] [date] NULL
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Grades]    Script Date: 12/27/2025 12:19:40 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Grades](
+	[grade_id] [int] NULL,
+	[enrollment_id] [int] NULL,
+	[final_grade] [nvarchar](5) NULL,
+	[final_marks] [varchar](5) NULL,
+	[updated_at_str] [date] NULL
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[LibraryBooks]    Script Date: 12/27/2025 12:19:40 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[LibraryBooks](
+	[book_id] [int] NULL,
+	[title] [nvarchar](200) NULL,
+	[author] [nvarchar](100) NULL,
+	[isbn] [nvarchar](20) NULL,
+	[dept_id] [int] NULL,
+	[status] [nvarchar](20) NULL,
+	[purchase_date] [date] NULL
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Payments]    Script Date: 12/27/2025 12:19:40 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Payments](
+	[payment_id] [int] NULL,
+	[fee_id] [int] NULL,
+	[amount_paid] [varchar](30) NULL,
+	[payment_date_str] [date] NULL,
+	[payment_method] [nvarchar](50) NULL,
+	[status] [nvarchar](20) NULL
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[ProjectMembers]    Script Date: 12/27/2025 12:19:40 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[ProjectMembers](
+	[member_id] [int] NULL,
+	[project_id] [int] NULL,
+	[student_id] [int] NULL,
+	[role] [nvarchar](50) NULL,
+	[join_date_str] [date] NULL
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[ResearchProjects]    Script Date: 12/27/2025 12:19:40 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[ResearchProjects](
+	[project_id] [int] NULL,
+	[project_title] [nvarchar](300) NULL,
+	[faculty_id] [int] NULL,
+	[dept_id] [int] NULL,
+	[start_date_str] [date] NULL,
+	[end_date_str] [date] NULL,
+	[status] [nvarchar](20) NULL,
+	[budget] [varchar](30) NULL
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[RevenueSummary]    Script Date: 12/27/2025 12:19:40 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[RevenueSummary](
+	[summary_id] [int] NULL,
+	[dept_name] [nvarchar](150) NULL,
+	[month_year] [nvarchar](10) NULL,
+	[total_fees_collected] [varchar](40) NULL,
+	[total_students] [int] NULL
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Rooms]    Script Date: 12/27/2025 12:19:40 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Rooms](
+	[room_id] [int] NULL,
+	[room_number] [nvarchar](20) NULL,
+	[building_id] [int] NULL,
+	[room_type] [nvarchar](50) NULL,
+	[capacity] [int] NULL
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Sections]    Script Date: 12/27/2025 12:19:40 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Sections](
+	[section_id] [int] NULL,
+	[course_id] [int] NULL,
+	[section_number] [nvarchar](10) NULL,
+	[faculty_id] [int] NULL,
+	[room_id] [int] NULL,
+	[semester] [nvarchar](20) NULL,
+	[year] [int] NULL,
+	[max_capacity] [int] NULL
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Students]    Script Date: 12/27/2025 12:19:40 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Students](
+	[student_id] [int] NULL,
+	[name] [nvarchar](100) NULL,
+	[email] [nvarchar](100) NULL,
+	[phone] [nvarchar](20) NULL,
+	[dept_id] [int] NULL,
+	[admission_date] [date] NULL,
+	[cgpa] [varchar](5) NULL,
+	[status] [nvarchar](20) NULL
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[StudentSectionAssignments]    Script Date: 12/27/2025 12:19:40 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[StudentSectionAssignments](
+	[assignment_id] [int] NULL,
+	[student_id] [int] NULL,
+	[section_id] [int] NULL,
+	[assigned_date_str] [nvarchar](20) NULL
+) ON [PRIMARY]
+GO
+USE [master]
+GO
+ALTER DATABASE [BUETBD] SET  READ_WRITE 
+GO

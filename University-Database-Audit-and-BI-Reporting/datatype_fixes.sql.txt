@@ -1,0 +1,218 @@
+-- Change Data type to Date from Varchar
+
+-- 1. ATTENDANCE TABLE
+BEGIN TRANSACTION;
+BEGIN TRY
+    -- Backup original data
+    SELECT * INTO #Attendance_Backup FROM [dbo].[Attendance];
+    
+    -- Clear table
+    DELETE FROM [dbo].[Attendance];
+    
+    -- Change column type
+    ALTER TABLE [dbo].[Attendance] 
+    ALTER COLUMN [attendance_date_str] DATE NULL;
+    
+    -- Restore data
+    INSERT INTO [dbo].[Attendance] 
+    SELECT 
+        attendance_id, student_id, section_id, 
+        TRY_CAST(attendance_date_str AS DATE) as attendance_date_str,
+        status
+    FROM #Attendance_Backup;
+    
+    -- Rename column
+    EXEC sp_rename 'dbo.Attendance.attendance_date_str', 'attendance_date', 'COLUMN';
+    
+    DROP TABLE #Attendance_Backup;
+    COMMIT TRANSACTION;
+    PRINT 'Attendance table fixed successfully';
+END TRY
+BEGIN CATCH
+    ROLLBACK TRANSACTION;
+    PRINT 'Error fixing Attendance: ' + ERROR_MESSAGE();
+END CATCH
+
+-- 2. BOOKISSUES TABLE (3 columns)
+BEGIN TRANSACTION;
+BEGIN TRY
+    SELECT * INTO #BookIssues_Backup FROM [dbo].[BookIssues];
+    DELETE FROM [dbo].[BookIssues];
+    
+    ALTER TABLE [dbo].[BookIssues] 
+    ALTER COLUMN [issue_date_str] DATE NULL;
+    
+    ALTER TABLE [dbo].[BookIssues] 
+    ALTER COLUMN [due_date_str] DATE NULL;
+    
+    ALTER TABLE [dbo].[BookIssues] 
+    ALTER COLUMN [return_date_str] DATE NULL;
+    
+    INSERT INTO [dbo].[BookIssues] 
+    SELECT 
+        issue_id, book_id, student_id,
+        TRY_CAST(issue_date_str AS DATE),
+        TRY_CAST(due_date_str AS DATE),
+        TRY_CAST(return_date_str AS DATE),
+        fine_amount
+    FROM #BookIssues_Backup;
+    
+    EXEC sp_rename 'dbo.BookIssues.issue_date_str', 'issue_date', 'COLUMN';
+    EXEC sp_rename 'dbo.BookIssues.due_date_str', 'due_date', 'COLUMN';
+    EXEC sp_rename 'dbo.BookIssues.return_date_str', 'return_date', 'COLUMN';
+    
+    DROP TABLE #BookIssues_Backup;
+    COMMIT TRANSACTION;
+    PRINT 'BookIssues table fixed successfully';
+END TRY
+BEGIN CATCH
+    ROLLBACK TRANSACTION;
+    PRINT 'Error fixing BookIssues: ' + ERROR_MESSAGE();
+END CATCH
+
+-- 3. ENROLLMENTS TABLE
+BEGIN TRANSACTION;
+BEGIN TRY
+    SELECT * INTO #Enrollments_Backup FROM [dbo].[Enrollments];
+    DELETE FROM [dbo].[Enrollments];
+    
+    ALTER TABLE [dbo].[Enrollments] 
+    ALTER COLUMN [enrollment_date_str] DATE NULL;
+    
+    INSERT INTO [dbo].[Enrollments] 
+    SELECT 
+        enrollment_id, student_id, course_id, semester, year, grade,
+        TRY_CAST(enrollment_date_str AS DATE) as enrollment_date
+    FROM #Enrollments_Backup;
+    
+    EXEC sp_rename 'dbo.Enrollments.enrollment_date_str', 'enrollment_date', 'COLUMN';
+    
+    DROP TABLE #Enrollments_Backup;
+    COMMIT TRANSACTION;
+    PRINT 'Enrollments table fixed successfully';
+END TRY
+BEGIN CATCH
+    ROLLBACK TRANSACTION;
+    PRINT 'Error fixing Enrollments: ' + ERROR_MESSAGE();
+END CATCH
+
+-- 4. FEES TABLE
+BEGIN TRANSACTION;
+BEGIN TRY
+    SELECT * INTO #Fees_Backup FROM [dbo].[Fees];
+    DELETE FROM [dbo].[Fees];
+    
+    ALTER TABLE [dbo].[Fees] 
+    ALTER COLUMN [due_date_str] DATE NULL;
+    
+    INSERT INTO [dbo].[Fees] 
+    SELECT 
+        fee_id, student_id, fee_type, amount,
+        TRY_CAST(due_date_str AS DATE) as due_date,
+        status, payment_date_str
+    FROM #Fees_Backup;
+    
+    EXEC sp_rename 'dbo.Fees.due_date_str', 'due_date', 'COLUMN';
+    
+    DROP TABLE #Fees_Backup;
+    COMMIT TRANSACTION;
+    PRINT 'Fees table fixed successfully';
+END TRY
+BEGIN CATCH
+    ROLLBACK TRANSACTION;
+    PRINT 'Error fixing Fees: ' + ERROR_MESSAGE();
+END CATCH
+
+-- 5. STUDENTSECTIONASSIGNMENTS TABLE
+BEGIN TRANSACTION;
+BEGIN TRY
+    SELECT * INTO #SSA_Backup FROM [dbo].[StudentSectionAssignments];
+    DELETE FROM [dbo].[StudentSectionAssignments];
+    
+    ALTER TABLE [dbo].[StudentSectionAssignments] 
+    ALTER COLUMN [assigned_date_str] DATE NULL;
+    
+    INSERT INTO [dbo].[StudentSectionAssignments] 
+    SELECT 
+        assignment_id, student_id, section_id,
+        TRY_CAST(assigned_date_str AS DATE) as assigned_date
+    FROM #SSA_Backup;
+    
+    EXEC sp_rename 'dbo.StudentSectionAssignments.assigned_date_str', 'assigned_date', 'COLUMN';
+    
+    DROP TABLE #SSA_Backup;
+    COMMIT TRANSACTION;
+    PRINT 'StudentSectionAssignments table fixed successfully';
+END TRY
+BEGIN CATCH
+    ROLLBACK TRANSACTION;
+    PRINT 'Error fixing StudentSectionAssignments: ' + ERROR_MESSAGE();
+END CATCH
+
+-- 6. EXAMINATIONS TABLE
+BEGIN TRANSACTION;
+BEGIN TRY
+    SELECT * INTO #Exams_Backup FROM [dbo].[Examinations];
+    DELETE FROM [dbo].[Examinations];
+    
+    ALTER TABLE [dbo].[Examinations] 
+    ALTER COLUMN [exam_date_str] DATE NULL;
+    
+    INSERT INTO [dbo].[Examinations] 
+    SELECT 
+        exam_id, course_id, exam_type,
+        TRY_CAST(exam_date_str AS DATE) as exam_date,
+        total_marks, semester, year
+    FROM #Exams_Backup;
+    
+    EXEC sp_rename 'dbo.Examinations.exam_date_str', 'exam_date', 'COLUMN';
+    
+    DROP TABLE #Exams_Backup;
+    COMMIT TRANSACTION;
+    PRINT 'Examinations table fixed successfully';
+END TRY
+BEGIN CATCH
+    ROLLBACK TRANSACTION;
+    PRINT 'Error fixing Examinations: ' + ERROR_MESSAGE();
+END CATCH
+
+
+-- Revenue Summary Table dropped due to redundancy
+DROP TABLE [dbo].[RevenueSummary];
+
+-- Broken or Illogical Relationship Fix
+
+-- A. Connect ExamResults to Enrollments (through Exams)
+
+-- Then link ExamResults to Examinations
+ALTER TABLE [dbo].[ExamResults] 
+ADD FOREIGN KEY ([exam_id]) REFERENCES [dbo].[Examinations]([exam_id]);
+
+ALTER TABLE [dbo].[ExamResults] 
+ADD FOREIGN KEY ([student_id]) REFERENCES [dbo].[Students]([student_id]);
+
+-- B. Add enrollment_id to ExamResults for direct link
+ALTER TABLE [dbo].[ExamResults] 
+ADD [enrollment_id] INT NULL;
+
+-- Update with logic (this needs your business rules)
+-- Then add FK:
+ALTER TABLE [dbo].[ExamResults] 
+ADD FOREIGN KEY ([enrollment_id]) REFERENCES [dbo].[Enrollments]([enrollment_id]);
+
+-- C. For Projects: Create FacultyProject table if needed
+CREATE TABLE [dbo].[FacultyProjects] (
+    [faculty_project_id] INT PRIMARY KEY,
+    [project_id] INT FOREIGN KEY REFERENCES [dbo].[ResearchProjects]([project_id]),
+    [faculty_id] INT FOREIGN KEY REFERENCES [dbo].[Faculty]([faculty_id]),
+    [role] NVARCHAR(50)
+);
+
+-- Poorly Designed ERD Issue
+-- FIX 2: Remove redundant semester/year from Courses
+ALTER TABLE [dbo].[Courses] DROP COLUMN IF EXISTS [semester];
+ALTER TABLE [dbo].[Courses] DROP COLUMN IF EXISTS [year];
+
+-- FIX 3: Remove duplicate grade storage (choose one option)
+-- Option A (Recommended): Remove grade from Enrollments, keep Grades table
+ALTER TABLE [dbo].[Enrollments] DROP COLUMN [grade];

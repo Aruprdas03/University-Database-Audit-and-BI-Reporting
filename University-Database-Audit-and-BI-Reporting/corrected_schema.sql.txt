@@ -1,0 +1,394 @@
+USE [BUETBD]
+GO
+/****** Object:  Table [dbo].[Alumni]    Script Date: 1/6/2026 10:30:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Alumni](
+	[alumni_id] [int] NOT NULL,
+	[student_id] [int] NULL,
+	[graduation_year] [int] NULL,
+	[current_job] [nvarchar](100) NULL,
+	[company] [nvarchar](100) NULL,
+	[email] [nvarchar](100) NULL,
+ CONSTRAINT [PK_Alumni] PRIMARY KEY CLUSTERED 
+(
+	[alumni_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Attendance]    Script Date: 1/6/2026 10:30:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Attendance](
+	[attendance_id] [int] NOT NULL,
+	[student_id] [int] NULL,
+	[section_id] [int] NULL,
+	[attendance_date] [date] NULL,
+	[status] [nvarchar](20) NULL,
+ CONSTRAINT [PK_Attendance] PRIMARY KEY CLUSTERED 
+(
+	[attendance_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[BookIssues]    Script Date: 1/6/2026 10:30:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[BookIssues](
+	[issue_id] [int] NOT NULL,
+	[book_id] [int] NULL,
+	[student_id] [int] NULL,
+	[issue_date] [date] NULL,
+	[due_date] [date] NULL,
+	[return_date] [date] NULL,
+	[fine_amount] [varchar](20) NULL,
+ CONSTRAINT [PK_BookIssues] PRIMARY KEY CLUSTERED 
+(
+	[issue_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Buildings]    Script Date: 1/6/2026 10:30:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Buildings](
+	[building_id] [int] NOT NULL,
+	[name] [nvarchar](100) NULL,
+	[location] [nvarchar](100) NULL,
+ CONSTRAINT [PK_Buildings] PRIMARY KEY CLUSTERED 
+(
+	[building_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Courses]    Script Date: 1/6/2026 10:30:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Courses](
+	[course_id] [int] NOT NULL,
+	[course_code] [nvarchar](20) NULL,
+	[course_name] [nvarchar](200) NULL,
+	[dept_id] [int] NULL,
+	[credits] [int] NULL,
+	[status] [nvarchar](20) NULL,
+ CONSTRAINT [PK_Courses] PRIMARY KEY CLUSTERED 
+(
+	[course_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[CourseSyllabus]    Script Date: 1/6/2026 10:30:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[CourseSyllabus](
+	[syllabus_id] [int] NOT NULL,
+	[course_id] [int] NULL,
+	[syllabus_content] [nvarchar](2000) NULL,
+	[last_updated_str] [date] NULL,
+ CONSTRAINT [PK_CourseSyllabus] PRIMARY KEY CLUSTERED 
+(
+	[syllabus_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Departments]    Script Date: 1/6/2026 10:30:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Departments](
+	[dept_id] [int] NOT NULL,
+	[dept_name] [nvarchar](150) NULL,
+	[head_of_dept] [nvarchar](100) NULL,
+ CONSTRAINT [PK_Departments] PRIMARY KEY CLUSTERED 
+(
+	[dept_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Enrollments]    Script Date: 1/6/2026 10:30:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Enrollments](
+	[enrollment_id] [int] NOT NULL,
+	[student_id] [int] NULL,
+	[course_id] [int] NULL,
+	[semester] [nvarchar](20) NULL,
+	[year] [int] NULL,
+	[enrollment_date] [date] NULL,
+ CONSTRAINT [PK_Enrollments] PRIMARY KEY CLUSTERED 
+(
+	[enrollment_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Examinations]    Script Date: 1/6/2026 10:30:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Examinations](
+	[exam_id] [int] NOT NULL,
+	[course_id] [int] NULL,
+	[exam_type] [nvarchar](50) NULL,
+	[exam_date] [date] NULL,
+	[total_marks] [int] NULL,
+	[semester] [nvarchar](20) NULL,
+	[year] [int] NULL,
+ CONSTRAINT [PK_Examinations] PRIMARY KEY CLUSTERED 
+(
+	[exam_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[ExamResults]    Script Date: 1/6/2026 10:30:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[ExamResults](
+	[result_id] [int] NOT NULL,
+	[exam_id] [int] NULL,
+	[student_id] [int] NULL,
+	[marks_obtained] [varchar](5) NULL,
+	[grade] [nvarchar](5) NULL,
+	[enrollment_id] [int] NULL,
+ CONSTRAINT [PK_ExamResults] PRIMARY KEY CLUSTERED 
+(
+	[result_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Faculty]    Script Date: 1/6/2026 10:30:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Faculty](
+	[faculty_id] [int] NOT NULL,
+	[name] [nvarchar](100) NULL,
+	[email] [nvarchar](100) NULL,
+	[phone] [nvarchar](20) NULL,
+	[dept_id] [int] NULL,
+	[designation] [nvarchar](50) NULL,
+	[hire_date] [date] NULL,
+	[status] [nvarchar](20) NULL,
+ CONSTRAINT [PK_Faculty] PRIMARY KEY CLUSTERED 
+(
+	[faculty_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[FacultyProjects]    Script Date: 1/6/2026 10:30:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[FacultyProjects](
+	[faculty_project_id] [int] NOT NULL,
+	[project_id] [int] NULL,
+	[faculty_id] [int] NULL,
+	[role] [nvarchar](50) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[faculty_project_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Fees]    Script Date: 1/6/2026 10:30:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Fees](
+	[fee_id] [int] NOT NULL,
+	[student_id] [int] NULL,
+	[fee_type] [nvarchar](50) NULL,
+	[amount] [varchar](30) NULL,
+	[due_date] [date] NULL,
+	[status] [nvarchar](20) NULL,
+	[payment_date_str] [date] NULL,
+ CONSTRAINT [PK_Fees] PRIMARY KEY CLUSTERED 
+(
+	[fee_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Grades]    Script Date: 1/6/2026 10:30:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Grades](
+	[grade_id] [int] NOT NULL,
+	[enrollment_id] [int] NULL,
+	[final_grade] [nvarchar](5) NULL,
+	[final_marks] [varchar](5) NULL,
+	[updated_at_str] [date] NULL,
+ CONSTRAINT [PK_Grades] PRIMARY KEY CLUSTERED 
+(
+	[grade_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[LibraryBooks]    Script Date: 1/6/2026 10:30:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[LibraryBooks](
+	[book_id] [int] NOT NULL,
+	[title] [nvarchar](200) NULL,
+	[author] [nvarchar](100) NULL,
+	[isbn] [nvarchar](20) NULL,
+	[dept_id] [int] NULL,
+	[status] [nvarchar](20) NULL,
+	[purchase_date] [date] NULL,
+ CONSTRAINT [PK_LibraryBooks] PRIMARY KEY CLUSTERED 
+(
+	[book_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Payments]    Script Date: 1/6/2026 10:30:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Payments](
+	[payment_id] [int] NOT NULL,
+	[fee_id] [int] NULL,
+	[amount_paid] [varchar](30) NULL,
+	[payment_date_str] [date] NULL,
+	[payment_method] [nvarchar](50) NULL,
+	[status] [nvarchar](20) NULL,
+ CONSTRAINT [PK_Payments] PRIMARY KEY CLUSTERED 
+(
+	[payment_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[ProjectMembers]    Script Date: 1/6/2026 10:30:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[ProjectMembers](
+	[member_id] [int] NOT NULL,
+	[project_id] [int] NULL,
+	[student_id] [int] NULL,
+	[role] [nvarchar](50) NULL,
+	[join_date_str] [date] NULL,
+ CONSTRAINT [PK_ProjectMembers] PRIMARY KEY CLUSTERED 
+(
+	[member_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[ResearchProjects]    Script Date: 1/6/2026 10:30:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[ResearchProjects](
+	[project_id] [int] NOT NULL,
+	[project_title] [nvarchar](300) NULL,
+	[faculty_id] [int] NULL,
+	[dept_id] [int] NULL,
+	[start_date_str] [date] NULL,
+	[end_date_str] [date] NULL,
+	[status] [nvarchar](20) NULL,
+	[budget] [varchar](30) NULL,
+ CONSTRAINT [PK_ResearchProjects] PRIMARY KEY CLUSTERED 
+(
+	[project_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Rooms]    Script Date: 1/6/2026 10:30:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Rooms](
+	[room_id] [int] NOT NULL,
+	[room_number] [nvarchar](20) NULL,
+	[building_id] [int] NULL,
+	[room_type] [nvarchar](50) NULL,
+	[capacity] [int] NULL,
+ CONSTRAINT [PK_Rooms] PRIMARY KEY CLUSTERED 
+(
+	[room_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Sections]    Script Date: 1/6/2026 10:30:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Sections](
+	[section_id] [int] NOT NULL,
+	[course_id] [int] NULL,
+	[section_number] [nvarchar](10) NULL,
+	[faculty_id] [int] NULL,
+	[room_id] [int] NULL,
+	[semester] [nvarchar](20) NULL,
+	[year] [int] NULL,
+	[max_capacity] [int] NULL,
+ CONSTRAINT [PK_Sections] PRIMARY KEY CLUSTERED 
+(
+	[section_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Students]    Script Date: 1/6/2026 10:30:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Students](
+	[student_id] [int] NOT NULL,
+	[name] [nvarchar](100) NULL,
+	[email] [nvarchar](100) NULL,
+	[phone] [nvarchar](20) NULL,
+	[dept_id] [int] NULL,
+	[admission_date] [date] NULL,
+	[cgpa] [varchar](5) NULL,
+	[status] [nvarchar](20) NULL,
+ CONSTRAINT [PK_Students] PRIMARY KEY CLUSTERED 
+(
+	[student_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[StudentSectionAssignments]    Script Date: 1/6/2026 10:30:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[StudentSectionAssignments](
+	[assignment_id] [int] NOT NULL,
+	[student_id] [int] NULL,
+	[section_id] [int] NULL,
+	[assigned_date] [date] NULL,
+ CONSTRAINT [PK_StudentSectionAssignments] PRIMARY KEY CLUSTERED 
+(
+	[assignment_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
